@@ -45,9 +45,9 @@ jobs:
           # Pack files
           if [ "${{ matrix.target }}" == "win-x64" ]; then
             # Pack to zip for Windows
-            7z a -tzip "${release_name}.zip" "./${release_name}/*"
+            7z a -tzip "${release_name}.zip" "${release_name}/adolc.exe*"
           else
-            tar czvf "${release_name}.tar.gz" "$release_name"
+            tar czvf "${release_name}.tar.gz" -C "$release_name" adolc
           fi
 
           # Delete output directory
