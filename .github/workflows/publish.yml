@@ -40,7 +40,8 @@ jobs:
           release_name="adolc-$tag-${{ matrix.target }}"
 
           # Build everything
-          dotnet publish src/AzureDevOpsLicenseChecker/AzureDevOpsLicenseChecker.csproj --framework net8.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+          dotnet publish src/AzureDevOpsLicenseChecker/AzureDevOpsLicenseChecker.csproj --framework net8.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name" \
+            /p:PublishSingleFile=true /p:PublishTrimmed=true /p:SelfContained=true
 
           # Pack files
           if [ "${{ matrix.target }}" == "win-x64" ]; then
