@@ -90,13 +90,13 @@ jobs:
 
           # Setup Git
           git config --local user.name "GitHub Action"
-          git config --local user.email "action@github.com"
+          git config --local user.email "fabspu@users.noreply.github.com"
           
           # Commit and Push
           git add -A
           git commit -m "Add/update Homebrew formula for $VERSION" --allow-empty
           
           # Push to a new branch and create a PR
-          git push origin HEAD:updates-for-pr  # Push to a new branch
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/migration-demo-wd/homebrew-tap.git origin HEAD:updates-for-pr  # Push to a new branch
           payload='{"title":"Add/update formula for version '$VERSION'","head":"updates-for-pr","base":"main"}'
-          curl -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/whiteducksoftware/homebrew-tap/pulls -d "$payload"
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/migration-demo-wd/homebrew-tap/pulls -d "$payload"
