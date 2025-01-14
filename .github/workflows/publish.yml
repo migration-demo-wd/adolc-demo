@@ -42,8 +42,8 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          tag=$(git describe --tags --abbrev=0)
-          release_name="adolc-$tag-${{ matrix.target }}"
+          # tag=$(git describe --tags --abbrev=0)
+          release_name="adolc-${{ matrix.target }}"
 
           # Build everything
           dotnet publish src/AzureDevOpsLicenseChecker/AzureDevOpsLicenseChecker.csproj --framework net8.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name" \
