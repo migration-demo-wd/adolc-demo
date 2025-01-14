@@ -39,38 +39,38 @@ jobs:
           FORMULA_PATH=./adolc.rb
 
           cat <<EOF > $FORMULA_PATH
-class Adolc < Formula
-  desc "Checker wether a Ado should be updated"
-  homepage "https://github.com/migration-demo-wd/adolc-demo"
-  version "$VERSION"
-  license "MIT"
-  
-  # Define all platform-specific URLs and SHA256 checksums
-  if Hardware::CPU.intel?
-    url "$MAC_X64_URL"
-    sha256 "$MAC_X64_SHA256"
-  elsif Hardware::CPU.arm?
-    url "$MAC_ARM_URL"
-    sha256 "$MAC_ARM_SHA256"
-  end
+          class Adolc < Formula
+            desc "Checker wether a Ado should be updated"
+            homepage "https://github.com/migration-demo-wd/adolc-demo"
+            version "$VERSION"
+            license "MIT"
+            
+            # Define all platform-specific URLs and SHA256 checksums
+            if Hardware::CPU.intel?
+              url "$MAC_X64_URL"
+              sha256 "$MAC_X64_SHA256"
+            elsif Hardware::CPU.arm?
+              url "$MAC_ARM_URL"
+              sha256 "$MAC_ARM_SHA256"
+            end
 
-  # Linux (assuming x64)
-  if OS.linux?
-    if Hardware::CPU.intel?
-      url "$LINUX_X64_URL"
-      sha256 "$LINUX_X64_SHA256"
-    elsif Hardware::CPU.arm?
-      url "$LINUX_ARM_URL"
-      sha256 "$LINUX_ARM_SHA256"
-    end
-  end
+            # Linux (assuming x64)
+            if OS.linux?
+              if Hardware::CPU.intel?
+                url "$LINUX_X64_URL"
+                sha256 "$LINUX_X64_SHA256"
+              elsif Hardware::CPU.arm?
+                url "$LINUX_ARM_URL"
+                sha256 "$LINUX_ARM_SHA256"
+              end
+            end
 
-  def install
-    # Installation commands depending on platform
-    bin.install "adolc"
-  end
-end
-EOF
+            def install
+              # Installation commands depending on platform
+              bin.install "adolc"
+            end
+          end
+          EOF
 
       - name: Push Formula to Homebrew Tap Repository
         env:
