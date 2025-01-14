@@ -17,12 +17,18 @@ jobs:
           - kind: linux
             os: ubuntu-latest
             target: linux-x64
+          - kind: linux ARM
+            os: ubuntu-latest
+            target: linux-arm64 
           - kind: windows
             os: windows-latest
             target: win-x64
           - kind: macOS
             os: macos-latest
             target: osx-x64
+          - kind: macOS ARM
+            os: macos-latest
+            target: osx-arm64
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
