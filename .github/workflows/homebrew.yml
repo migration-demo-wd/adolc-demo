@@ -90,7 +90,7 @@ jobs:
         run: |
           cd tap_repo
           git checkout -b "updates-for-pr"
-          git pull origin
+          git pull origin updates-for-pr
 
       - name: Copy Data to Homebrew Tap Repo
         run: |
