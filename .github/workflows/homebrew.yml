@@ -92,9 +92,11 @@ jobs:
           git config --local user.name "GitHub Action"
           git config --local user.email "fabspu@users.noreply.github.com"
           
+          git checkout -b "updates-for-pr"
+
           # Commit and Push
           git add -A
-          git commit -m "Add/update Homebrew formula for $VERSION" --allow-empty
+          git commit -am "Add/update Homebrew formula for $VERSION" --allow-empty
           
           # Push to a new branch and create a PR
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/migration-demo-wd/homebrew-tap.git origin HEAD:updates-for-pr  # Push to a new branch
