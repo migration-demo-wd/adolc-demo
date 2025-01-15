@@ -81,7 +81,6 @@ jobs:
           # Clone the Tap repository
           git clone https://x-access-token:${GITHUB_TOKEN}@github.com/migration-demo-wd/homebrew-tap.git tap_repo
           cd tap_repo
-          git pull origin
           
           # Setup Git
           git config --local user.name "GitHub Action"
@@ -91,6 +90,7 @@ jobs:
         run: |
           cd tap_repo
           git checkout -b "updates-for-pr"
+          git pull origin
 
       - name: Copy Data to Homebrew Tap Repo
         run: |
