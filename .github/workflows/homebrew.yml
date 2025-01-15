@@ -75,30 +75,44 @@ jobs:
           EOF
 
       - name: Push Formula to Homebrew Tap Repository
+      
+      - name: Clone Homebrew Tap Repo
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}  # Use the PAT for authentication
         run: |
           # Clone the Tap repository
-          git clone https://github.com/migration-demo-wd/homebrew-tap.git tap_repo
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/migration-demo-wd/homebrew-tap.git tap_repo
           cd tap_repo
-
-          # Ensure the Formula directory exists; create if it doesn't
-          mkdir -p Formula
-
-          # Copy the generated formula to the tap repository
-          cp ../adolc.rb ./Formula/adolc.rb  # Adjust the path as needed
-
+          
           # Setup Git
           git config --local user.name "GitHub Action"
           git config --local user.email "fabspu@users.noreply.github.com"
-          
+
+      - name: Create New Branch
+        run: |
+          cd tap_repo
           git checkout -b "updates-for-pr"
 
-          # Commit and Push
+      - name: Copy Data to Homebrew Tap Repo
+        run: |
+          cd tap_repo
+          
+          # Ensures the Formula directory exists; create if it doesn't
+          mkdir -p Formula
+
+          # Copy the generated formula to the tap repository
+          cp ../adolc.rb ./Formula/adolc.rb            
+
+          # Commit 
           git add -A
           git commit -am "Add/update Homebrew formula for $VERSION" --allow-empty
           
-          # Push to a new branch and create a PR
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/migration-demo-wd/homebrew-tap.git origin HEAD:updates-for-pr  # Push to a new branch
-          payload='{"title":"Add/update formula for version '$VERSION'","head":"updates-for-pr","base":"main"}'
-          curl -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/migration-demo-wd/homebrew-tap/pulls -d "$payload"
+      - name: Push Changes to Homebrew Tap Repo
+        run: |
+          cd tap_repo
+          git push origin updates-for-pr
+      
+      - name: Create Pull Request
+        run: |
+          PR_DATA=$(jq -n --arg title "Add/update formula for version '$VERSION'" --arg head "updates-for-pr" --arg base "main" --arg body "This PR includes updates for $SOFTWARE_NAME/$VERSION" '{title: $title, head: $head, base: $base, body: $body}')
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/migration-demo-wd/homebrew-tap/pulls -d "$PR_DATA"
