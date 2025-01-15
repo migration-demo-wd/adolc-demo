@@ -74,8 +74,6 @@ jobs:
           end
           EOF
 
-      - name: Push Formula to Homebrew Tap Repository
-      
       - name: Clone Homebrew Tap Repo
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}  # Use the PAT for authentication
