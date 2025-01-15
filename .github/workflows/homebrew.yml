@@ -21,7 +21,7 @@ jobs:
         id: generate_formula
         run: |
           # Your logic to generate the Homebrew formula after the release
-          SOFTRWARE_NAME="adolc"
+          SOFTWARE_NAME="adolc"
           VERSION=$(git describe --tags --abbrev=0)  # Ensure you extract the version properly
           BASE_URL="https://github.com/migration-demo-wd/adolc-demo/releases/download/$VERSION"
           
