@@ -115,5 +115,7 @@ jobs:
         run: |
           VERSION=$(git describe --tags --abbrev=0)  
           BRANCH_NAME="updates-for-pr/$VERSION"
+          echo "Tag Version: $VERSION"
+          echo "Branch Name: $BRANCH_NAME"
           cd tap_repo
           git push --set-upstream origin $BRANCH_NAME
