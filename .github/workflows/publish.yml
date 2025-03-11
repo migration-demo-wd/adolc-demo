@@ -44,26 +44,26 @@ jobs:
         run: |
           # tag=$(git describe --tags --abbrev=0)
           software_name="adolc"
-          release_name="${software_name}-${{ matrix.target }}"
+          release_name="$software_name-${{ matrix.target }}"
 
           # Build everything
-          dotnet publish src/AzureDevOpsLicenseChecker/AzureDevOpsLicenseChecker.csproj --framework net8.0 --runtime "${{ matrix.target }}" -c Release -o "${release_name}" \
+          dotnet publish src/AzureDevOpsLicenseChecker/AzureDevOpsLicenseChecker.csproj --framework net8.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name" \
             -p:PublishSingleFile=true -p:PublishTrimmed=true -p:SelfContained=true
 
           # Pack files
           if [ "${{ matrix.target }}" == "win-x64" ]; then
             # Pack to zip for Windows
-            7z a -tzip "${release_name}.zip" "${release_name}/${software_name}.exe*"
+            7z a -tzip "$release_name.zip" "$release_name/$software_name.exe*"
           else
-            tar czvf "${release_name}.tar.gz" -C "${release_name}" ${software_name}
+            tar czvf "$release_name.tar.gz" -C "$release_name" $software_name
           fi
 
           # Delete output directory
-          rm -r "${release_name}"
+          rm -r "$release_name"
 
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
-          files: "${software_name}*"
+          files: "$software_name*"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
