@@ -23,7 +23,8 @@ jobs:
           # Your logic to generate the Homebrew formula after the release
           SOFTWARE_NAME="${{ vars.SOFTWARE_NAME }}"
           UPPERCASE_NAME="${{ vars.UPPERCASE_SOFTWARE_NAME }}"
-          VERSION=$(git describe --tags --abbrev=0)  # Ensure you extract the version properly
+          # VERSION=$(git describe --tags --abbrev=0)  # Ensure you extract the version properly
+          VERSION=$(git tag --sort=-creatordate | head -n 1)
           BASE_URL="https://github.com/migration-demo-wd/adolc-demo/releases/download/$VERSION"
           
           # Define paths for each platform's asset
@@ -89,7 +90,8 @@ jobs:
 
       - name: Create New Branch
         run: |
-          VERSION=$(git describe --tags --abbrev=0)  
+          # VERSION=$(git describe --tags --abbrev=0)  
+          VERSION=$(git tag --sort=-creatordate | head -n 1)
           BRANCH_NAME="updates-for-pr/$VERSION"
           cd tap_repo
           git checkout -b "$BRANCH_NAME"
@@ -97,7 +99,8 @@ jobs:
 
       - name: Copy Data to Homebrew Tap Repo
         run: |
-          VERSION=$(git describe --tags --abbrev=0)  
+          # VERSION=$(git describe --tags --abbrev=0)  
+          VERSION=$(git tag --sort=-creatordate | head -n 1)
           
           cd tap_repo
           
@@ -113,7 +116,8 @@ jobs:
           
       - name: Push Changes to Homebrew Tap Repo
         run: |
-          VERSION=$(git describe --tags --abbrev=0)  
+          # VERSION=$(git describe --tags --abbrev=0)  
+          VERSION=$(git tag --sort=-creatordate | head -n 1)
           BRANCH_NAME="updates-for-pr/$VERSION"
           echo "Tag Version: $VERSION"
           echo "Branch Name: $BRANCH_NAME"
