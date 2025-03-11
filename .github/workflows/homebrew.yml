@@ -95,13 +95,15 @@ jobs:
 
       - name: Copy Data to Homebrew Tap Repo
         run: |
+          VERSION=$(git describe --tags --abbrev=0)  # Ensure you extract the version properly
+          
           cd tap_repo
           
           # Ensures the Formula directory exists; create if it doesn't
           mkdir -p Formula
 
           # Copy the generated formula to the tap repository
-          cp ../adolc.rb ./Formula/adolc.rb            
+          cp ../${{ vars.SOFTWARE_NAME }}.rb ./Formula/${{ vars.SOFTWARE_NAME }}.rb            
 
           # Commit 
           git add -A
@@ -111,8 +113,3 @@ jobs:
         run: |
           cd tap_repo
           git push --set-upstream origin updates-for-pr
-      
-      - name: Create Pull Request
-        run: |
-          PR_DATA=$(jq -n --arg title "Add/update formula for version '$VERSION'" --arg head "updates-for-pr" --arg base "main" --arg body "This PR includes updates for $SOFTWARE_NAME/$VERSION" '{title: $title, head: $head, base: $base, body: $body}')
-          curl -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/migration-demo-wd/homebrew-tap/pulls -d "$PR_DATA"
