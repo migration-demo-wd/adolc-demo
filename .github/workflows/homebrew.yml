@@ -21,7 +21,8 @@ jobs:
         id: generate_formula
         run: |
           # Your logic to generate the Homebrew formula after the release
-          SOFTWARE_NAME="adolc"
+          SOFTWARE_NAME="${{ vars.SOFTWARE_NAME }}"
+          UPPERCASE_NAME="${{ vars.UPPERCASE_SOFTWARE_NAME }}"
           VERSION=$(git describe --tags --abbrev=0)  # Ensure you extract the version properly
           BASE_URL="https://github.com/migration-demo-wd/adolc-demo/releases/download/$VERSION"
           
@@ -38,10 +39,10 @@ jobs:
           MAC_ARM_URL="$BASE_URL/$SOFTWARE_NAME-osx-arm64.tar.gz"
           MAC_ARM_SHA256=$(curl -sSL "$MAC_ARM_URL" | shasum -a 256 | awk '{print $1}')
 
-          FORMULA_PATH=./adolc.rb
+          FORMULA_PATH=./$SOFTWARE_NAME.rb
 
           cat <<EOF > $FORMULA_PATH
-          class Adolc < Formula
+          class $UPPERCASE_NAME < Formula
             desc "Checker wether a Ado should be updated"
             homepage "https://github.com/migration-demo-wd/adolc-demo"
             version "$VERSION"
@@ -69,7 +70,7 @@ jobs:
 
             def install
               # Installation commands depending on platform
-              bin.install "adolc"
+              bin.install "$SOFTWARE_NAME"
             end
           end
           EOF
@@ -90,7 +91,7 @@ jobs:
         run: |
           cd tap_repo
           git checkout -b "updates-for-pr"
-          git pull origin updates-for-pr
+          # git pull origin updates-for-pr
 
       - name: Copy Data to Homebrew Tap Repo
         run: |
@@ -109,7 +110,7 @@ jobs:
       - name: Push Changes to Homebrew Tap Repo
         run: |
           cd tap_repo
-          git push origin updates-for-pr
+          git push --set-upstream origin updates-for-pr
       
       - name: Create Pull Request
         run: |
