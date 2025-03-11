@@ -89,13 +89,15 @@ jobs:
 
       - name: Create New Branch
         run: |
+          VERSION=$(git describe --tags --abbrev=0)  
+          BRANCH_NAME="updates-for-pr/$VERSION"
           cd tap_repo
-          git checkout -b "updates-for-pr"
-          # git pull origin updates-for-pr
+          git checkout -b "$BRANCH_NAME"
+          # git pull origin $BRANCH_NAME
 
       - name: Copy Data to Homebrew Tap Repo
         run: |
-          VERSION=$(git describe --tags --abbrev=0)  # Ensure you extract the version properly
+          VERSION=$(git describe --tags --abbrev=0)  
           
           cd tap_repo
           
@@ -111,5 +113,7 @@ jobs:
           
       - name: Push Changes to Homebrew Tap Repo
         run: |
+          VERSION=$(git describe --tags --abbrev=0)  
+          BRANCH_NAME="updates-for-pr/$VERSION"
           cd tap_repo
-          git push --set-upstream origin updates-for-pr
+          git push --set-upstream origin $BRANCH_NAME
